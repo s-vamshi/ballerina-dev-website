@@ -170,7 +170,7 @@ export default function PatternList(props) {
               {
                 // Object.entries(props.patterns).map(([categoryName, patters]) => (
                 props.categories.map((categoryName) => (
-                  <Container>
+                  <Container key={categoryName}>
                     <h2>{categoryName}</h2>
                     <Row>
                       {
