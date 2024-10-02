@@ -19,6 +19,7 @@
 import fs from "fs";
 import matter from "gray-matter";
 import React from "react";
+import { useRouter } from "next/router"
 import ReactMarkdown from "react-markdown";
 import { Container, Col, Button, Offcanvas } from "react-bootstrap";
 import remarkGfm from "remark-gfm";
@@ -87,6 +88,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { slug } }) {
+  console.log(slug);
   const id = slug[slug.length - 1];
   slug = slug.join("/");
 
@@ -108,6 +110,7 @@ export async function getStaticProps({ params: { slug } }) {
 }
 
 export default function PostPage({ frontmatter, content, id, codeSnippets }) {
+  const router = useRouter();
   const codes = codeSnippets ? new Map(JSON.parse(codeSnippets)) : new Map();
 
   // Show mobile left nav
@@ -117,6 +120,16 @@ export default function PostPage({ frontmatter, content, id, codeSnippets }) {
 
   // Show page toc
   const [showToc, setShowToc] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      const sectionToScroll = document.getElementById(hash);
+      if (sectionToScroll) {
+        sectionToScroll.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [router]);
 
   return (
     <>
